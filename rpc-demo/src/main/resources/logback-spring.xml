@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration>
+
+	<!-- 使用spring配置文件中的变量 -->
+	<springProperty scope="context" name="APP_NAME"	source="spring.application.name" />
+	<!-- 时间变量 -->
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
+
+	<!-- 输出日志到控制台 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<!-- 按秒输出到文件，用于测试环境 -->
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<!-- use the previously created timestamp to create a uniquely named log file -->
+		<file>${LOG_PATH}/log-${bySecond}.log</file>
+		<encoder>
+			<pattern>%d{HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 按天输出日志到文件,用于生产环境 -->
+	<appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${APP_NAME}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<FileNamePattern>${APP_NAME}.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.eclipse.jetty" level="INFO" />
+
+	<!-- 生产环境日志配置 -->
+	<springProfile name="product">
+		<root level="INFO">
+			<appender-ref ref="ROLLING" />
+		</root>
+	</springProfile>
+	
+	<!-- 测试环境日志配置 -->
+	<springProfile name="test">
+		<root level="INFO">
+			<appender-ref ref="ROLLING" />
+		</root>
+	</springProfile>
+
+	<!-- 开发环境日志配置 -->
+	<springProfile name="develop">
+		<logger name="net.qiyuesuo.portal" level="DEBUG" />
+		<root level="INFO">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+</configuration>

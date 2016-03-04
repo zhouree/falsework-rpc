@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "zookeeper.hosts",
+    "type": "java.lang.String",
+    "description": "zookeeper服务器地址"
+  },
+  {
+    "name": "rpc.server.thrift.worker-threads",
+    "type": "java.lang.String",
+    "description": "thrift worker线程数"
+  },
+  {
+    "name": "rpc.server.thrift.selector-threads",
+    "type": "java.lang.String",
+    "description": "thrift selector线程数"
+  },
+  {
+    "name": "rpc.server.port",
+    "type": "java.lang.Integer",
+    "description": "rpc 服务器端口"
+  }
+]}

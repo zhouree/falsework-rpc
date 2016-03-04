@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+net.qiyuesuo.rpc.config.ClientAutoConfiguration,\
+net.qiyuesuo.rpc.config.ServerAutoConfiguration,\
+net.qiyuesuo.rpc.config.ZkAutoConfiguration
